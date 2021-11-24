@@ -1,0 +1,90 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+ {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+
+
+<div id="sidebar">
+    <h3>Categories</h3>
+    <ul>
+        <li {% if not category %}class="selected"{% endif %}>
+            <a href="{% url 'shop:product_list' %}">All</a>
+        </li>
+        {% for c in categories %}
+            <li {% if category.slug == c.slug %}class="selected"
+            {% endif %}>
+            <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+ </div>
+
+<div id="main" class="product-list">
+    <h1>{% if category %}{{ category.name }}{% else %}Products
+    {% endif %}</h1>
+    {% for product in products %}
+    <div class="item">
+        <a href="{{ product.get_absolute_url }}">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+        </a>
+        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        <br>
+        ${{ product.price }}
+    </div>
+ {% endfor %}
+ </div>
+
+
+
+{% block content %}
+
+<div class="latest-products">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-heading">
+
+              <ul class="nav nav-tabs">
+                  <li class="nav-link" {% if not category %} {% endif %}>
+                    <a href="{% url 'shop:product_list' %}">All Product</a>
+                  </li>
+                  {% for c in categories %}
+                  <li class="nav-item" {% if category.slug == c.slug %}class="selected"
+                    {% endif %}>
+                    <a class="nav-link" href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                  </li>
+              {% endfor %}
+                </ul>
+            </div>
+          </div>
+
+           {% for product in products %}
+          <div class="col-md-4">
+            <div class="product-item">
+              <a href="{{ product.get_absolute_url }}">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+        </a>
+              <div class="down-content">
+                <a href="{{ product.get_absolute_url }}"><h4>{{ product.name }}</h4></a>
+                <h6>Rp {{ product.price }} </h6>
+                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
+                <ul class="stars">
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                  <li><i class="fa fa-star"></i></li>
+                </ul>
+                <span>Reviews (24)</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
